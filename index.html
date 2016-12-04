@@ -1,0 +1,296 @@
+
+<!doctype html>
+<html>
+<head>
+    <title>MD Lab</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="jquery-ui.css">
+    <script src="jquery-1.10.2.js"></script>
+    <script src="jquery-ui.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        .ui-tabs-vertical { width: 600px; }
+        .ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: 7em; }
+        .ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0; }
+        .ui-tabs-vertical .ui-tabs-nav li a { display:block; width: 100%;}
+        .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { padding-bottom: 0; padding-right: .1em; border-right-width: 1px; }
+        .ui-tabs-vertical .ui-tabs-panel { padding: 1em; float: right; width: 400px;}
+  </style>
+     
+  <script type="text/javascript" src="source.js"></script> 
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse ">
+        <div class="container-fluid">
+            
+            <div class="navbar-header">
+               <a class="navbar-brand" href="#"> Matematica Discreta Laborator </a>
+               <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+      </button>  
+            </div>
+        
+
+            <div class="collapse navbar-collapse" id="menu">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#" id="openGr1">Creați graful</a>
+                    </li>
+                    <li class="dropdown">
+                        <a id="matrixMenu" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Operații graf<span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="matrixMenu">
+                            <li>
+                                <a href="#" id="openGr2">Adaugăți o muchie</a>
+                            </li>
+                            <li>
+                                <a href="#" id="openGr3">Ștergeți o muchie</a>
+                            </li>
+                            <li>
+                                <a href="#" id="openGr4">Adaugă/Ștergeți un vîrf</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a id="matrixMenu" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reprezentare a grafului<span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="matrixMenu">
+                            <li>
+                                <a href="#" id="aMatrix"onclick=" showAdiacentArray();">Adiacență</a>
+                            </li>
+                            <li>
+                                <a href="#" id="iMatrix"onclick="showIncidentArray();">Incidență</a>
+                            </li>
+                            <li>
+                                <a href="#" id="list" onclick=" showList();">Lista</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a id="goMenu" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Parcurgerea <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="goMenu">
+                            <li>
+                                <a href="#" id="buttonDFS"onclick=" ">Adîncime(<b>DFS</b>)</a>
+                            </li>
+                            <li>
+                                <a href="#" id="buttonBFS"onclick=" ">Lățime(<b>BFS</b>)</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                    <a id="wayMenu" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Drum Minim<span class="caret"></span>
+                    </a>
+                        <ul class="dropdown-menu" aria-labelledby="wayMenu">
+                            <li>
+                                <a href="#" id="fordOpen">Ford</a>
+                            </li>
+                            <li>
+                               <a href="#" id="bkOpen">Bellman-Kalaba</a>
+                            </li>
+                    </ul>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            
+            <div class="col-xs-12">
+                <dir id="insGr">
+                        <div id="tabs-1" title="Creați graful">
+                        <p>
+                            <form id="insertGraf" class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="virfuri" class="col-sm-2 control-laybel">Vîrfuri:</label>
+                                    <input type="text" class="form-control" id="virfuri" placeholder="Numarul de vîrfuri"></input>
+                                </div>
+                                <div class="radio-inline">
+                                    <label>
+                                    <input type="radio" name="tipGr" id="orientat" value="0" checked></input>
+                                    Graf neorientat
+                                    </label>
+                                </div>
+                                <div class="radio-inline">
+                                	<label>
+                                    <input type="radio" name="tipGr" id="orientat" value="1"></input>
+                                    Graf orientat
+                                    </label>
+                                </div>
+                                
+                                <div class="text-right ">
+                                    <p id="gInfoStatus" class="text-success"></p>
+                                    <button id="submit" type="button" class="btn btn-primary" onclick="read(); adiacentArray = makeAdiacentArray(mainData[0]); incidentArray = makeIncidentArray(mainData[0],mainData[1]); lista = createList(); ">Introduceți</button>
+                                    </div>
+                            </form>
+                        </p>
+                        </div>
+                        <div id="tabs-2" title="Adaugăți o muchie">
+                            <p>
+                                <form id="insertMuchie" class="form-horizontal">
+                                    <div class="form-group">
+                                        <label for="insMuchie" class="col-sm-2 control-laybel">Introduceți vîrf 1:</label>
+                                        <input  type="text" class="form-control" name="insMuchie" id="insertMV1" placeholder="v1"></input>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="insMuchie" class="col-sm-2 control-laybel">Introduceți vîrf 2:</label>
+                                        <input id="insertMV2" type="text" class="form-control" name="insMuchie" placeholder="v2"></input>
+                                    </div>
+                                    <div class="text-right">
+                                        <p id="mStatus" class="text-success"></p>
+                                        <button id="openMuchie" type="button" class="btn btn-default" onclick="getEdge(); showAdiacentArray(); showIncidentArray(); lista = createList(); showList();">Adauga muchie </button>
+                                    </div>
+                                </form>
+                            </p>
+                        </div>
+                        <div id="tabs-3" title="Ștergeți o muchie">
+                        <p>
+                            <form id="delEdge" class="form-horizontal">
+                                <div class="form-group">
+                                        <label for="delMuchie" class="col-sm-2 control-laybel">Introduceți vîrf 1:</label>
+                                        <input  type="text" class="form-control" name="delMuchie" id="deleteV1" placeholder="v1"></input>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="delMuchie" class="col-sm-2 control-laybel">Introduceți vîrf 2:</label>
+                                        <input id="deleteV2" type="text" class="form-control" name="delMuchie" placeholder="v2"></input>
+                                    </div>
+                                    <div class="text-right">
+                                        <p id="delMStatus" class="text-success"></p>
+                                        <button id="openMuchie" type="button" class="btn btn-default" onclick="deleteEdge(); showAdiacentArray(); showIncidentArray(); lista = createList(); showList();">Șterge muchie </button>
+                                    </div>
+                            </form>
+                        </p>
+                        </div>
+                        <div id="tabs-4" title="Adaugă/Ștergeți un vîrf">
+                        <p>
+                            <form id="removePoint" class="form-horizontal">
+                                
+                                <div class="form-group">
+                                    <label for="virfuri" class="col-sm-2 control-laybel">Vîrful:</label>
+                                    <input type="text" class="form-control" id="vToDelete" placeholder="Vîrful care urmează să fie șters"></input>
+                                </div>
+                                <div class="text-right">
+                                        <p id="delVMStatus" class="text-success"></p>
+                                        <button id="openMuchie" type="button" class="btn btn-default" onclick=" deletePoint();  showAdiacentArray(); showIncidentArray(); lista = createList(); showList();">Șterge vîrf</button>
+                                </div>
+                                <hr>
+                                <div class="text-right">
+                                        <p id="addVMStatus" class="text-success"></p>
+                                        <button id="openMuchie" type="button" class="btn btn-default" onclick=" addPoint();  showAdiacentArray(); showIncidentArray(); lista = createList(); showList();">Adaugă vîrf</button>
+                                </div>
+                            </form>
+                        </p>
+                        </div>
+                    
+                    
+                </div>
+                <div id="aMatrixDiv" title="Matricea de adiacență" >
+                    <table id="aMatrixTable" class="table table-striped">
+
+                    </table>
+                </div>
+                <div id="iMatrixDiv" title="Matricea de incidență" >
+                    <table id="iMatrixTable" class="table table-striped">
+
+                    </table>
+                </div>
+                <div id="listDiv" title="Lista">
+                	<p id="shList"></p>
+                    <div class="text-right">
+                </div>
+                <div id="goDiv" title="Adîncime(DFS)">
+                    
+                    <p>
+                        <form id="insertGraf" class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="startPoint" class="col-sm-2 control-laybel">Începem:</label>
+                                    <input type="text" class="form-control" id="startPoint" placeholder="Din care vîrf începem parcurgerea?"></input>
+                                </div>
+                                
+                                <div class="text-right ">
+                                    <p id="goStatus" class="text-success"></p>
+                                    <button id="runDFS" type="button" class="btn btn-primary" onclick="var x = getStartPoint(); DFS(x); showDFS();">Parcurgeți(DFS)</button>
+                                    </div>
+                            </form>
+                    </p>
+                    <div id="showDFSDiv" class="panel panel-success">
+                        <div class="panel-heading">Graful parcurs:</div>
+                        <div  class="panel-body">
+                        <h1 id="showDFS"></h1>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="goBFSDiv" title="Lățime(BFS)">
+                    
+                    <p>
+                        <form id="insertGraf" class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="startBFSPoint" class="col-sm-2 control-laybel">Începem:</label>
+                                    <input type="text" class="form-control" id="startBFSPoint" placeholder="Din care vîrf începem parcurgerea?"></input>
+                                </div>
+                                
+                                <div class="text-right ">
+                                    <p id="goBFSStatus" class="text-success"></p>
+                                    <button id="runBFS" type="button" class="btn btn-primary" onclick="var y = getBFSData(); BFS(y); showBFS();">Parcurgeți(BFS)</button>
+                                    </div>
+                            </form>
+                    </p>
+                    <div id="showBFSDiv" class="panel panel-success">
+                        <div class="panel-heading">Graful parcurs:</div>
+                        <div  class="panel-body">
+                        <h1 id="showBFS"></h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="fordDiv" title="Algoritmul Ford" style="margin: 0px; padding: 0px;">
+                <div id="tabs">
+                    <ul>
+                        <li>
+                            <a href="#tabs-1">Ponderea</a>
+                        </li>
+                        <li>
+                            <a href="#tabs-2" onclick="Ford(0); showEdgeData(); showH(h);">Ford</a>
+                        </li>
+                    </ul>
+                    <div id="tabs-1">
+                        <p>
+                            <form id="getWeight" class="form-horizontal">
+                                <div class="form-group">
+                                    <label id="weightEdge" for="weight" class="col-sm-2 control-laybel" style="width: 200px;"></label>
+                                    <input id="weight" type="text" class="form-control" placeholder="Introduceți ponderea"></input>
+                                </div>
+                                <div class="text-right">
+                                    <p id="weightStatus"></p>
+                                    <button id="insertWeight" type="button" class="btn btn-primary" onclick="getWeight();">Introduceți  </button>
+                                </div>
+                            </form>
+                        </p>
+                    </div>
+
+                    <div id="tabs-2">
+                        <p style="float: left;">
+                            <table id="showEdgeData"></table>
+                            <table id="showH"></table>
+                        </p>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+    </div>
+</body>
+</html>
